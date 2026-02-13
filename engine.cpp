@@ -8,16 +8,12 @@ Engine::~Engine() {}
 void Engine::init() {
   map.generate(1000, 1000);
 
-  int start_x = 500;
-  int start_y = 500;
+  // Spawn near a major intersection to see the structure
+  int start_x = 50;
+  int start_y = 50;
   
-  // Find nearest walkable tile
   while (!map.is_walkable(start_x, start_y)) {
     start_x++;
-    if (start_x >= map.get_width()) {
-      start_x = 0;
-      start_y++;
-    }
   }
 
   player = Entity(registry.create(), &registry);

@@ -11,20 +11,39 @@ void Game_map::generate(int w, int h, int d) {
   tiles.assign(width * height * depth, Tile());
 
   FastNoiseLite noise;
-  noise.SetSeed(1337);
-  noise.SetNoiseType(FastNoiseLite::NoiseType_Perlin);
-  noise.SetFrequency(0.1f); 
+  noise.SetSeed(42);
+  noise.SetNoiseType(FastNoiseLite::NoiseType_Cellular);
+  noise.SetFrequency(0.15f);
 
   for (int z = 0; z < depth; ++z) {
     for (int y = 0; y < height; ++y) {
       for (int x = 0; x < width; ++x) {
-        float value = noise.GetNoise((float)x, (float)y, (float)z * 10.0f);
+        int idx = z * (width * height) + y * width + x;
+
+        // 1. Major Avenues (3 tiles wide)
+        if ((x % 60) < 3 || (y % 60) < 3) {
+          tiles[idx] = Tile(Tile::Street, x, y);
+          continue;
+        }
+
+        // 2. Minor Alleys (1 tile wide)
+        if ((x % 20) == 0 || (y % 20) == 0) {
+          tiles[idx] = Tile(Tile::Street, x, y);
+          continue;
+        }
+
+        // 3. Dense Building Blocks
+        float val = noise.GetNoise((float)x, (float)y);
         
-        // Threshold for "Buildings" vs "Streets"
-        if (value > 0.2f) {
-          tiles[z * (width * height) + y * width + x] = Tile(Tile::Wall, x, y);
+        if (val > -0.1f) {
+          tiles[idx] = Tile(Tile::Building, x, y); 
         } else {
-          tiles[z * (width * height) + y * width + x] = Tile(Tile::Floor, x, y);
+          tiles[idx] = Tile(Tile::Street, x, y);
+        }
+
+        // 4. Random Neon ads on buildings
+        if (tiles[idx].glyph == '#' && (x * 7 + y * 13) % 47 == 0) {
+            tiles[idx] = Tile(Tile::NeonSign, x, y);
         }
       }
     }

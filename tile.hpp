@@ -3,7 +3,7 @@
 #include "point.hpp"
 
 struct Tile {
-  enum Type { Floor, Wall };
+  enum Type { Street, Building, NeonSign };
 
   Point pos;
   bool is_walkable;
@@ -13,13 +13,17 @@ struct Tile {
 
   Tile(Type t, int x, int y) : pos({x, y}) {
     switch (t) {
-      case Floor:
+      case Street:
         is_walkable = true;
-        glyph = '.';
+        glyph = '.'; 
         break;
-      case Wall:
+      case Building:
         is_walkable = false;
-        glyph = '#';
+        glyph = '#'; 
+        break;
+      case NeonSign:
+        is_walkable = false;
+        glyph = '*'; 
         break;
     }
   }
