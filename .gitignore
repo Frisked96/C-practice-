@@ -1,9 +1,17 @@
 # Build artifacts
 rof
 *.o
+*.d
 build/
+bin/
+obj/
 
 # IDE and system files
 .vscode/
 .idea/
 .DS_Store
+*.swp
+*.swo
+
+# Temporary files
+/home/frisked/.gemini/tmp/
