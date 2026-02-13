@@ -1,6 +1,9 @@
-/.vscode
-/.idea
-/node_modules
-.vscode
-.vscode/*
-!.vscode/settings.json
+# Build artifacts
+rof
+*.o
+build/
+
+# IDE and system files
+.vscode/
+.idea/
+.DS_Store
